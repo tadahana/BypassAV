@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	// msf生成的go shellcode
+	// 使用msf生成go的shellcode
 	buf :=  []byte{};
 
 	fmt.Println("原来的数据:", buf)
